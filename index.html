@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Hangman App</title>
+  </head>
+  <body>
+    <header>
+      <h1>Hangman App</h1>
+      <p><i class="fab fa-js" alt="js"></i>Javascript Games</p>
+      <button name="theme-mode" class="theme-btn">
+        <span class="toggle"></span>
+      </button>
+    </header>
+    <main>
+      <div class="sky">
+        <div class="sun"></div>
+        <div class="game-data">
+          <p>Score:<span class="score"></span></p>
+          <p>Guesses:<span class="guesses"></span></p>
+          <p>Word: <span class="current-word"></span></p>
+        </div>
+        <div class="night-scene">
+          <div class="building building-1"></div>
+          <div class="building building-2"></div>
+          <div class="building building-3"></div>
+          <div class="building building-4"></div>
+          <div class="building building-5"></div>
+          <div class="building building-6"></div>
+        </div>
+        <div class="day-scene">
+          <div class="tree-div">
+            <div class="tree-top"></div>
+            <div class="tree-bottom"></div>
+
+            <div class="hangman-div">
+              <div class="branch" data-count="one">
+                <!-- <div class="rope" data-count="two">
+                  <div class="noose"></div>
+                </div> -->
+              </div>
+              <div class="person-div">
+                <div class="rope" data-count="two">
+                  <div class="noose"></div>
+                </div>
+                <div class="head">
+                  <div class="eyes">
+                    <div class="eye eye-one"></div>
+                    <div class="eye eye-two"></div>
+                  </div>
+                  <div class="mouth"></div>
+                </div>
+                <div class="neck"></div>
+                <div class="middle-body">
+                  <div class="arm arm-one"></div>
+                  <div class="body"></div>
+                  <div class="arm arm-two"></div>
+                </div>
+                <div class="legs">
+                  <div class="leg leg-one"></div>
+                  <div class="leg leg-two"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="game-controller">
+        <div class="keyboard-div"></div>
+      </div>
+    </main>
+    <canvas id="canvas"></canvas>
+
+    <footer>Footer&copy;</footer>
+    <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+
+    <script>
+      var buildings = document.querySelectorAll(".building");
+      var footer = document.querySelector("footer");
+      let themeInput = document.querySelector(".theme-btn");
+      let toggle = document.querySelector(".toggle");
+      var nightScene = document.querySelector(".night-scene");
+      var lightScene = document.querySelector(".day-scene");
+      let footerText = footer.textContent;
+      let isDark = false;
+
+      footer.innerText = "";
+
+      function printFooter(num) {
+        let span = document.createElement("span");
+        span.textContent = footerText[footerText.length - num];
+        span.className = "footer-letter";
+        footer.append(span);
+        if (num > 0) {
+          setTimeout(() => printFooter(num - 1), 200);
+        }
+      }
+
+      printFooter(footerText.length);
+
+      themeInput.onclick = (e) => {
+        let appTheme = !isDark ? "light" : "dark";
+        isDark = !isDark;
+
+        if (isDark) {
+          toggle.classList.add("dark-toggle");
+        } else {
+          console.log("remove the dark!");
+          toggle.classList.remove("dark-toggle");
+        }
+
+        appTheme === "dark"
+          ? (nightScene.style.opacity = 1)
+          : (nightScene.style.opacity = 0);
+
+        appTheme === "light"
+          ? (lightScene.style.opacity = 1)
+          : (lightScene.style.opacity = 0);
+
+        document.body.dataset.theme = appTheme;
+      };
+      //   var counter = 65;
+      //   var alphabet = new Array(26)
+      //     .fill()
+      //     .map(() => String.fromCharCode(counter++));
+      //   alphabet.push("Enter");
+
+      //   console.log(alphabet);
+
+      //   alphabet.forEach((l) => {
+      //     let letterButton = document.createElement("div");
+      //     letterButton.innerText = l;
+      //     letterButton.className = "letter-div";
+      //     keyboardDiv.append(letterButton);
+      //     letterButton.onclick = (e) => chooseLetter(e);
+      //   });
+
+      buildings.forEach((b) => {
+        let height = ((Math.random() * 125) | 0) + 85;
+        b.style.height = `${height}px`;
+        for (let i = 0; i < height; i += 35) {
+          for (let j = 0; j < 3; j++) {
+            let window = document.createElement("div");
+            window.className = "div-window";
+            b.append(window);
+          }
+        }
+      });
+
+      function fireConfetti() {
+        const canvas = document.getElementById("canvas");
+
+        console.log("fire confetti");
+
+        const jsConfetti = new JSConfetti({ canvas });
+
+        var emojis = [
+          ["🌈", "⚡️", "💥", "✨", "💫", "🌸"],
+          ["red", "blue", "green", "yellow", "orange"],
+        ];
+
+        jsConfetti.addConfetti({
+          emojis: ["red", "blue", "green", "yellow", "orange"],
+        });
+        jsConfetti
+          .addConfetti()
+          .then(() => console.log("Confetti animation com"));
+      }
+    </script>
+
+    <script src="script.js"></script>
+  </body>
+</html>
